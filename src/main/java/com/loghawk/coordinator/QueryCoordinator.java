@@ -94,7 +94,8 @@ public class QueryCoordinator {
                         return future.get();
                     } catch (Exception e) {
                         logger.error("Failed to get result from shard: {}", e.getMessage());
-                        return new QueryResult(Collections.emptyList(), 0, 0, 0);
+                        return new QueryResult(Collections.emptyList(),
+                                0L, 0, 0);
                     }
                 })
                 .collect(Collectors.toList());
@@ -298,7 +299,7 @@ public class QueryCoordinator {
         logger.info("QueryCoordinator shutdown complete");
     }
 
-    @javax.annotation.PreDestroy
+    @jakarta.annotation.PreDestroy
     public void preDestroy() {
         shutdown();
     }
