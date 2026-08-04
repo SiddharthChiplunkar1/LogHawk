@@ -6,6 +6,7 @@ import com.loghawk.model.LogEntry;
 import com.loghawk.parser.LogParser;
 import com.loghawk.parser.ParserFactory;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -158,6 +159,8 @@ public class LogIngestionService {
         return isIngesting;
     }
 
+    @Getter
+    @Setter
     public static class IngestionResult {
         private final long linesProcessed;
         private final long bytesProcessed;
