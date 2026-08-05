@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Performance Benchmarks</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🦅 LogHawk</div>
+    <ul class="nav-links">
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/benchmarks" class="active">Benchmarks</a></li>
+    </ul>
+</nav>
+
+<main class="main-content">
+    <h2 class="page-title">Performance Benchmarks</h2>
+
+    <div class="action-bar">
+        <button onclick="runBenchmark()" class="btn-primary">▶ Run Full Benchmark</button>
+        <button onclick="runLinearVsIndexed()" class="btn-secondary">Linear vs Indexed</button>
+        <button onclick="runConcurrencyScaling()" class="btn-secondary">Concurrency Scaling</button>
+        <span class="help-text">Compare naive vs optimized approaches</span>
+    </div>
+
+    <!-- Linear vs Indexed -->
+    <div class="card">
+        <div class="card-header"><h3>🔍 Linear Search vs Indexed Search</h3></div>
+        <div class="card-body" id="linearVsIndexed">
+            <p style="color: var(--text-secondary);">Run benchmarks to see results.</p>
+        </div>
+    </div>
+
+    <!-- Concurrency Scaling -->
+    <div class="card">
+        <div class="card-header"><h3>⚡ Concurrency Scaling</h3></div>
+        <div class="card-body" id="concurrencyScaling">
+            <p style="color: var(--text-secondary);">Run benchmarks to see results.</p>
+        </div>
+    </div>
+
+    <!-- Time Range -->
+    <div class="card">
+        <div class="card-header"><h3>🕐 Time-Range Search Performance</h3></div>
+        <div class="card-body" id="timeRangeSearch">
+            <p style="color: var(--text-secondary);">Run benchmarks to see results.</p>
+        </div>
+    </div>
+
+    <!-- Complexity Table (Always Visible) -->
+    <div class="card">
+        <div class="card-header"><h3>📐 Big-O Complexity Analysis</h3></div>
+        <div class="table-container">
+            <table class="complexity-table">
+                <thead>
+                <tr><th>Operation</th><th>Naive</th><th>Optimized</th><th>Explanation</th></tr>
+                </thead>
+                <tbody>
+                <tr><td>Keyword Search</td><td class="bad">O(n)</td><td class="good">O(1)</td><td>Inverted index eliminates full scan</td></tr>
+                <tr><td>Time-Range Filter</td><td class="bad">O(n)</td><td class="good">O(log n)</td><td>Binary search on sorted timestamps</td></tr>
+                <tr><td>Multi-Keyword AND</td><td class="bad">O(n × k)</td><td class="good">O(min results)</td><td>Intersection of posting lists</td></tr>
+                <tr><td>Level Aggregation</td><td class="bad">O(n)</td><td class="good">O(1)</td><td>Pre-computed counters</td></tr>
+                <tr><td>Ingestion (k threads)</td><td class="bad">O(n)</td><td class="good">O(n/k)</td><td>Parallel chunk processing</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="card">
+        <div class="card-header"><h3>💻 System Information</h3></div>
+        <div class="card-body" id="systemInfo">
+            <p style="color: var(--text-secondary);">Run benchmarks to populate.</p>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/benchmark.js}"></script>
+</body>
+</html>
