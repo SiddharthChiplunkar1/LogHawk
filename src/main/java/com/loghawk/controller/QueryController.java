@@ -109,23 +109,3 @@ public class QueryController {
         return response;
     }
 }
-
-/**
- * Search request DTO
- */
-@Getter
-@Setter
-class SearchRequest {
-    private String keyword;
-    private Long startTime;
-    private Long endTime;
-    private List<String> levels;
-    private Integer maxResults;
-
-    @Override
-    public String toString() {
-        return String.format("SearchRequest[keyword=%s," +
-                        "timeRange=%s-%s, levels=%s, maxResults=%d]",
-                keyword, startTime, endTime, levels, maxResults);
-    }
-}
