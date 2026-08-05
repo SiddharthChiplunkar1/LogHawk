@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar">
-    <div class="nav-brand">🦅 LogHawk</div>
+    <div class="nav-brand">LogHawk</div>
     <ul class="nav-links">
         <li><a href="/" class="active">Dashboard</a></li>
         <li><a href="/search">Search</a></li>
@@ -23,28 +23,28 @@
     <!-- Quick Stats -->
     <div class="stat-grid">
         <div class="stat-card primary">
-            <div class="stat-icon">📊</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <span class="stat-label">Total Logs Indexed</span>
                 <span class="stat-value" id="totalEntries" th:text="${totalEntries}">0</span>
             </div>
         </div>
         <div class="stat-card success">
-            <div class="stat-icon">🖥️</div>
+            <div class="stat-icon">️</div>
             <div class="stat-info">
                 <span class="stat-label">Active Shards</span>
                 <span class="stat-value" id="totalShards" th:text="${totalShards}">0</span>
             </div>
         </div>
         <div class="stat-card warning">
-            <div class="stat-icon">🔍</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <span class="stat-label">Index Terms</span>
                 <span class="stat-value" id="indexTerms" th:text="${indexTerms}">0</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">⚡</div>
+            <div class="stat-icon"></div>
             <div class="stat-info">
                 <span class="stat-label">Active Threads</span>
                 <span class="stat-value" id="activeThreads" th:text="${activeThreads}" style="color: #fbbf24;">0</span>
@@ -57,7 +57,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>Log Level Distribution</h3>
-                <button onclick="loadStats()" class="btn-sm">🔄 Refresh</button>
+                <button onclick="loadStats()" class="btn-sm">Refresh</button>
             </div>
             <div class="card-body">
                 <div class="log-breakdown" id="levelDistribution">
@@ -99,7 +99,7 @@
                            placeholder="Type a keyword and press Enter (e.g., ERROR, OutOfMemory, exception)">
                 </div>
                 <div class="form-group btn-group">
-                    <button onclick="quickSearch()" class="btn-primary">🔍 Search</button>
+                    <button onclick="quickSearch()" class="btn-primary">Search</button>
                 </div>
             </div>
             <div id="quickSearchResults" style="margin-top: 1rem;"></div>
