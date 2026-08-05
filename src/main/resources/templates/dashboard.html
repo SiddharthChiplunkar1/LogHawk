@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">LogHawk Dashboard</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🦅 LogHawk</div>
+    <ul class="nav-links">
+        <li><a href="/" class="active">Dashboard</a></li>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/benchmarks">Benchmarks</a></li>
+    </ul>
+    <div class="nav-status"><span class="status-dot online"></span> System Online</div>
+</nav>
+
+<main class="main-content">
+    <h2 class="page-title">System Overview</h2>
+
+    <!-- Quick Stats -->
+    <div class="stat-grid">
+        <div class="stat-card primary">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Logs Indexed</span>
+                <span class="stat-value" id="totalEntries" th:text="${totalEntries}">0</span>
+            </div>
+        </div>
+        <div class="stat-card success">
+            <div class="stat-icon">🖥️</div>
+            <div class="stat-info">
+                <span class="stat-label">Active Shards</span>
+                <span class="stat-value" id="totalShards" th:text="${totalShards}">0</span>
+            </div>
+        </div>
+        <div class="stat-card warning">
+            <div class="stat-icon">🔍</div>
+            <div class="stat-info">
+                <span class="stat-label">Index Terms</span>
+                <span class="stat-value" id="indexTerms" th:text="${indexTerms}">0</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-info">
+                <span class="stat-label">Active Threads</span>
+                <span class="stat-value" id="activeThreads" th:text="${activeThreads}" style="color: #fbbf24;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+        <!-- Log Level Distribution -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Log Level Distribution</h3>
+                <button onclick="loadStats()" class="btn-sm">🔄 Refresh</button>
+            </div>
+            <div class="card-body">
+                <div class="log-breakdown" id="levelDistribution">
+                    <div class="bar-item">
+                        <span class="bar-label">ERROR</span>
+                        <div class="bar"><div class="bar-fill error" id="errorBar" style="width: 0%"></div></div>
+                        <span class="bar-count" id="errorCount">-</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">WARN</span>
+                        <div class="bar"><div class="bar-fill warn" id="warnBar" style="width: 0%"></div></div>
+                        <span class="bar-count" id="warnCount">-</span>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">INFO</span>
+                        <div class="bar"><div class="bar-fill info" id="infoBar" style="width: 0%"></div></div>
+                        <span class="bar-count" id="infoCount">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card">
+            <div class="card-header"><h3>System Info</h3></div>
+            <div class="card-body" id="systemInfoPanel">
+                <p style="color: var(--text-secondary);">Loading system stats...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Search -->
+    <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-header"><h3>Quick Search</h3></div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group flex-grow">
+                    <input type="text" id="quickSearch" class="form-control"
+                           placeholder="Type a keyword and press Enter (e.g., ERROR, OutOfMemory, exception)">
+                </div>
+                <div class="form-group btn-group">
+                    <button onclick="quickSearch()" class="btn-primary">🔍 Search</button>
+                </div>
+            </div>
+            <div id="quickSearchResults" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/dashboard.js}"></script>
+<script>
+    // Quick search from dashboard
+    async function quickSearch() {
+        const query = document.getElementById('quickSearch').value.trim();
+        if (!query) return;
+
+        try {
+            const response = await fetch('/api/v1/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keyword: query, maxResults: 10 })
+            });
+            const data = await response.json();
+
+            const container = document.getElementById('quickSearchResults');
+            if (data.entries && data.entries.length > 0) {
+                container.innerHTML = `<p style="color: var(--success); margin-bottom: 0.5rem;">
+                        Found ${data.totalMatches} matches in ${data.queryTimeMs.toFixed(2)}ms</p>
+                        <table class="log-table"><tbody>
+                        ${data.entries.slice(0, 5).map(e => `
+                            <tr>
+                                <td class="timestamp">${e.formattedTimestamp || new Date(e.timestamp).toLocaleString()}</td>
+                                <td><span class="log-level ${e.level}">${e.level}</span></td>
+                                <td class="log-message">${e.message || ''}</td>
+                            </tr>
+                        `).join('')}
+                        </tbody></table>`;
+            } else {
+                container.innerHTML = '<p style="color: var(--text-secondary);">No results found.</p>';
+            }
+        } catch (err) {
+            document.getElementById('quickSearchResults').innerHTML =
+                `<p style="color: var(--danger);">Search failed: ${err.message}</p>`;
+        }
+    }
+
+    document.getElementById('quickSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') quickSearch();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Search Logs</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🦅 LogHawk</div>
+    <ul class="nav-links">
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/search" class="active">Search</a></li>
+        <li><a href="/benchmarks">Benchmarks</a></li>
+    </ul>
+</nav>
+
+<main class="main-content">
+    <h2 class="page-title">Log Search</h2>
+
+    <!-- Search Form -->
+    <div class="card">
+        <div class="card-body">
+            <div class="search-form">
+                <div class="form-row">
+                    <div class="form-group flex-grow">
+                        <label>Search Query</label>
+                        <input type="text" id="searchQuery" class="form-control"
+                               placeholder="ERROR, OutOfMemory, exception, userId:12345">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>From</label>
+                        <input type="datetime-local" id="timeFrom" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="datetime-local" id="timeTo" class="form-control">
+                    </div>
+                    <div class="form-group btn-group">
+                        <label>&nbsp;</label>
+                        <button onclick="executeSearch()" class="btn-primary">🔍 Search</button>
+                        <button onclick="compareSearch()" class="btn-secondary">📊 Compare Methods</button>
+                        <button onclick="clearSearch()" class="btn-secondary">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Metadata -->
+    <div class="search-meta" id="searchMeta" style="display: none;">
+        <span>Found <strong id="resultCount">0</strong> results in</span>
+        <span class="query-time" id="queryTime">0 ms</span>
+        <span>across <strong id="shardsQueried">0</strong> shards</span>
+        <span id="aggregations" style="margin-left: auto;"></span>
+    </div>
+
+    <!-- Results -->
+    <div class="card" id="resultsCard" style="display: none;">
+        <div class="card-header">
+            <h3>Results</h3>
+            <button onclick="exportResults()" class="btn-sm">📥 Export CSV</button>
+        </div>
+        <div class="table-container">
+            <table class="log-table">
+                <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Level</th>
+                    <th>Source</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody id="resultsBody"></tbody>
+            </table>
+        </div>
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="icon">🔍</div>
+            <p>No matching logs found.</p>
+        </div>
+    </div>
+
+    <!-- Comparison Results -->
+    <div id="comparisonResult"></div>
+</main>
+
+<script th:src="@{/js/search.js}"></script>
+</body>
+</html>
