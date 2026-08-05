@@ -38,9 +38,10 @@ public class LogHawkConfig {
         long now = System.currentTimeMillis();
         long hourInMillis = 3600000L;
 
-        // Create 24 shards, each covering 1 hour
+        // Create 24 shards covering the PAST 24 hours (not future)
+        long startOfRange = now - (24 * hourInMillis);
         for (int i = 0; i < 24; i++) {
-            long startTime = now + (i * hourInMillis);
+            long startTime = startOfRange + (i * hourInMillis);
             long endTime = startTime + hourInMillis;
             shards.add(new LogShard("shard-" + i, startTime, endTime));
         }
@@ -55,8 +56,13 @@ public class LogHawkConfig {
     @Bean(name = "taskExecutor")
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        executor.setMaxPoolSize(20);
+
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        int corePoolSize = Math.max(2, availableProcessors);
+        int maxPoolSize = Math.max(corePoolSize * 2, 20);
+
+        executor.setCorePoolSize(corePoolSize);
+        executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(100);
         executor.setThreadNamePrefix("LogHawk-");
         executor.initialize();
