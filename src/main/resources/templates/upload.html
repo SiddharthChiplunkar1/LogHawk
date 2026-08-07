@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout :: head(${title})}"></th:block>
+</head>
+<body>
+    <div class="app-container">
+        <th:block th:replace="~{layout :: sidebar}"></th:block>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h2 class="page-title" th:text="${title}">Upload Logs</h2>
+                <div class="topbar-actions">
+                    <div class="status-indicator" id="systemStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Checking Status...</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="upload-container glass-panel">
+                    <div class="upload-header">
+                        <h3>Ingest New Logs</h3>
+                        <p>Upload your log files for indexing. Supported formats: Simple Text, JSON.</p>
+                    </div>
+
+                    <form id="uploadForm" class="upload-form">
+                        <div class="format-selector">
+                            <label>Log Format:</label>
+                            <select id="logFormat" name="format" class="styled-select">
+                                <option value="SIMPLE">Simple (LogHawk Default)</option>
+                                <option value="JSON">JSON (Structured)</option>
+                            </select>
+                        </div>
+
+                        <div class="drop-zone" id="dropZone">
+                            <i class="ph ph-cloud-arrow-up drop-icon"></i>
+                            <span class="drop-text">Drag and drop your log file here</span>
+                            <span class="drop-subtext">or</span>
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+                            <input type="file" id="fileInput" name="file" accept=".log,.txt,.json" style="display: none;">
+                        </div>
+                        
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <i class="ph ph-file-text"></i>
+                            <span id="fileName">No file selected</span>
+                            <button type="button" class="btn-icon" id="removeFile"><i class="ph ph-x"></i></button>
+                        </div>
+
+                        <div class="upload-actions">
+                            <button type="submit" id="btnUpload" class="btn btn-primary" disabled>
+                                <i class="ph ph-upload"></i> Upload & Ingest
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="progress-container" id="progressContainer" style="display: none;">
+                        <div class="progress-info">
+                            <span id="progressStatus">Uploading...</span>
+                            <span id="progressPercentage">0%</span>
+                        </div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div id="uploadResult" class="upload-result" style="display: none;">
+                        <!-- Results populated via JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initUpload();
+        });
+    </script>
+</body>
+</html>

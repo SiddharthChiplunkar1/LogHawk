@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | LogHawk'">LogHawk</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" th:fragment="sidebar">
+            <div class="sidebar-header">
+                <i class="ph ph-hawk brand-icon"></i>
+                <h1 class="brand-text">LogHawk</h1>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">
+                        <i class="ph ph-squares-four"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/search}" th:classappend="${#httpServletRequest.requestURI == '/search' ? 'active' : ''}">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <span>Search Logs</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/benchmarks}" th:classappend="${#httpServletRequest.requestURI == '/benchmarks' ? 'active' : ''}">
+                        <i class="ph ph-chart-line-up"></i>
+                        <span>Benchmarks</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/upload}" th:classappend="${#httpServletRequest.requestURI == '/upload' ? 'active' : ''}">
+                        <i class="ph ph-upload-simple"></i>
+                        <span>Upload Logs</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/live}" th:classappend="${#httpServletRequest.requestURI == '/live' ? 'active' : ''}">
+                        <i class="ph ph-broadcast"></i>
+                        <span>Live Feed</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h2 class="page-title" th:text="${title}">Dashboard</h2>
+                <div class="topbar-actions">
+                    <div class="status-indicator" id="systemStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Checking Status...</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper" layout:fragment="content">
+                <!-- Page content goes here -->
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

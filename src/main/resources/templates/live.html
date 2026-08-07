@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout :: head(${title})}"></th:block>
+</head>
+<body>
+    <div class="app-container">
+        <th:block th:replace="~{layout :: sidebar}"></th:block>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h2 class="page-title" th:text="${title}">Live Log Feed</h2>
+                <div class="topbar-actions">
+                    <div class="status-indicator" id="wsStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Disconnected</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="live-feed-controls glass-panel">
+                    <div class="feed-actions">
+                        <button id="btnConnect" class="btn btn-primary"><i class="ph ph-plug"></i> Connect</button>
+                        <button id="btnDisconnect" class="btn btn-secondary" disabled><i class="ph ph-plug-x"></i> Disconnect</button>
+                        <button id="btnClearFeed" class="btn btn-secondary"><i class="ph ph-trash"></i> Clear Feed</button>
+                    </div>
+                    <div class="feed-filters">
+                        <label class="custom-checkbox level-info"><input type="checkbox" id="liveFilterInfo" checked><span>INFO</span></label>
+                        <label class="custom-checkbox level-warn"><input type="checkbox" id="liveFilterWarn" checked><span>WARN</span></label>
+                        <label class="custom-checkbox level-error"><input type="checkbox" id="liveFilterError" checked><span>ERROR</span></label>
+                        <label class="custom-checkbox level-debug"><input type="checkbox" id="liveFilterDebug" checked><span>DEBUG</span></label>
+                    </div>
+                </div>
+
+                <div class="live-feed-container glass-panel">
+                    <div id="liveFeed" class="live-feed terminal-like">
+                        <div class="feed-placeholder">Waiting for connection...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initLiveFeed();
+        });
+    </script>
+</body>
+</html>
